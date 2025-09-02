@@ -21,7 +21,7 @@ jobs:
           # Find all image files in the images directory
           ls -1 fotos-web | while read filename
           do
-              echo "<img src='https://raw.githubusercontent.com/${{ github.repository }}/main/images/$filename' alt='Imagen de la galería' class='gallery-image'>"
+              echo "<img src='https://raw.githubusercontent.com/${{ github.repository }}/main/fotos-web/$filename' alt='Imagen de la galería' class='gallery-image'>"
           done > gallery-content.html
 
       - name: Commit and push changes
