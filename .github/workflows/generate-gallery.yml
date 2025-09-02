@@ -5,12 +5,13 @@ on:
     branches:
       - main
     paths:
-      - 'images/**'
+      - 'fotos-web/**'
 
 jobs:
   generate-gallery:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write # ¡Esta es la línea clave que faltaba!
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -18,7 +19,6 @@ jobs:
       - name: Generate HTML for gallery
         id: generate
         run: |
-          # Find all image files in the images directory
           ls -1 fotos-web | while read filename
           do
               echo "<img src='https://raw.githubusercontent.com/${{ github.repository }}/main/fotos-web/$filename' alt='Imagen de la galería' class='gallery-image'>"
