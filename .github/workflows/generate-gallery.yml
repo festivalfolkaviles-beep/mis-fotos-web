@@ -19,7 +19,7 @@ jobs:
         id: generate
         run: |
           # Find all image files in the images directory
-          ls -1 images | while read filename
+          ls -1 fotos-web | while read filename
           do
               echo "<img src='https://raw.githubusercontent.com/${{ github.repository }}/main/images/$filename' alt='Imagen de la galería' class='gallery-image'>"
           done > gallery-content.html
