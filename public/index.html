@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fotos Automática</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding-top: 20px;
+        }
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .gallery-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery-image:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Mi Galería de Fotos</h1>
+    <div id="image-container" class="gallery-container">
+        <p>Cargando imágenes...</p>
+    </div>
+
+    <script>
+        // La URL para obtener la lista de nombres de archivo
+        const imageListUrl = 'https://[URL_DE_TU_SITIO_EN_CLOUDFLARE]/image_list.txt';
+        // La URL base para las imágenes
+        const baseUrl = 'https://[URL_DE_TU_SITIO_EN_CLOUDFLARE]/fotos/';
+
+        function loadImages() {
+            const container = document.getElementById('image-container');
+            fetch(imageListUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se pudo cargar la lista de imágenes.');
+                    }
+                    return response.text();
+                })
+                .then(fileNames => {
+                    // Divide el texto en un array de nombres de archivo
+                    const imageFiles = fileNames.split('\n').filter(Boolean);
+                    let htmlContent = '';
+                    if (imageFiles.length > 0) {
+                        imageFiles.forEach(fileName => {
+                            const imageUrl = baseUrl + fileName;
+                            htmlContent += `<img src="${imageUrl}" alt="Imagen de la galería" class="gallery-image">`;
+                        });
+                    } else {
+                        htmlContent = '<p>No hay imágenes para mostrar en este momento.</p>';
+                    }
+                    container.innerHTML = htmlContent;
+                })
+                .catch(error => {
+                    console.error('Error al cargar la galería:', error);
+                    container.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                });
+        }
+
+        // Cargar las imágenes al cargar la página
+        loadImages();
+    </script>
+
+</body>
+</html>
