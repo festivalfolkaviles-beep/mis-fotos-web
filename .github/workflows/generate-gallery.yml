@@ -1,0 +1,33 @@
+name: Generate Gallery
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'images/**'
+
+jobs:
+  generate-gallery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Generate HTML for gallery
+        id: generate
+        run: |
+          # Find all image files in the images directory
+          ls -1 images | while read filename
+          do
+              echo "<img src='https://raw.githubusercontent.com/${{ github.repository }}/main/images/$filename' alt='Imagen de la galería' class='gallery-image'>"
+          done > gallery-content.html
+
+      - name: Commit and push changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add gallery-content.html
+          git commit -m "Generated gallery content" || echo "No changes to commit"
+          git push
